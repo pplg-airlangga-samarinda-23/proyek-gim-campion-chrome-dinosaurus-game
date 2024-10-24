@@ -37,10 +37,13 @@ let cactus3Img;
 //physics
 let velocityX = -8; //cactus moving left speed
 let velocityY = 0;
-let gravity = .4;
+let gravity = .3; //semakin kecil nomornya semakin tinggi dan sebaliknya
 
 let gameOver = false;
 let score = 0;
+
+// Mengambil high scores dari localStorage
+let highScores = JSON.parse(localStorage.getItem("highScores")) || [];
 
 window.onload = function() {
     board = document.getElementById("board");
@@ -48,7 +51,8 @@ window.onload = function() {
     board.width = boardWidth;
 
     context = board.getContext("2d"); //used for drawing on the board
-
+    
+    
     //draw initial dinosaur
     // context.fillStyle="green";
     // context.fillRect(dino.x, dino.y, dino.width, dino.height);
@@ -71,6 +75,9 @@ window.onload = function() {
     requestAnimationFrame(update);
     setInterval(placeCactus, 1000); //1000 milliseconds = 1 second
     document.addEventListener("keydown", moveDino);
+
+    // Menampilkan lima skor tertinggi saat ini
+    displayHighScores();
 }
 
 function update() {
@@ -97,12 +104,15 @@ function update() {
             dinoImg.onload = function() {
                 context.drawImage(dinoImg, dino.x, dino.y, dino.width, dino.height);
             }
+
+            // Simpan skor saat game over
+            saveScore(score);
         }
     }
 
     //score
-    context.fillStyle="black";
-    context.font="20px courier";
+    context.fillStyle = "black";
+    context.font = "20px courier";
     score++;
     context.fillText(score, 5, 20);
 }
@@ -148,7 +158,7 @@ function placeCactus() {
         cactus.width = cactus2Width;
         cactusArray.push(cactus);
     }
-    else if (placeCactusChance > .50) { //50% you get cactus1
+    else if (placeCactusChance > .40) { //60% you get cactus1
         cactus.img = cactus1Img;
         cactus.width = cactus1Width;
         cactusArray.push(cactus);
@@ -164,4 +174,33 @@ function detectCollision(a, b) {
            a.x + a.width > b.x &&   //a's top right corner passes b's top left corner
            a.y < b.y + b.height &&  //a's top left corner doesn't reach b's bottom left corner
            a.y + a.height > b.y;    //a's bottom left corner passes b's top left corner
+}
+
+function saveScore(newScore) {
+    // Tambahkan skor baru ke array highScores
+    highScores.push(newScore);
+
+    // Urutkan skor dari yang terbesar ke terkecil
+    highScores.sort((a, b) => b - a);
+
+    // Simpan hanya lima skor tertinggi
+    highScores = highScores.slice(0, 5);
+
+    // Simpan skor ke localStorage
+    localStorage.setItem("highScores", JSON.stringify(highScores));
+
+    // Tampilkan kembali lima skor tertinggi
+    displayHighScores();
+}
+
+function displayHighScores() {
+    const highScoresList = document.getElementById("highScoresList");
+    highScoresList.innerHTML = ""; // Kosongkan list sebelum menambahkan item baru
+
+    // Loop melalui lima skor tertinggi dan tampilkan di halaman
+    highScores.forEach((score, index) => {
+        let li = document.createElement("li");
+        li.textContent = `${index + 1}. ${score}`;
+        highScoresList.appendChild(li);
+    });
 }

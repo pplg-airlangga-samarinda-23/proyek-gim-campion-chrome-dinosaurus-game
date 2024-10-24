@@ -3,12 +3,54 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport", content="width=device-width, initial-scale=1.0">
-        <title>Chrome Dinosaur Game</title>
+        <title>Game Berbahaya</title>
         <link rel="stylesheet" href="dino.css">
         <script src="dino.js"></script>
     </head>
     <body>
-        <h1>Chrome Dinosaur Game</h1>
+        <div id="Menu">
+            <h1>Menu Game</h1>
+
+            <div class="tombol">
+                <button id="m1" onclick="return suki('Game', 'Menu');">Start</button><br>
+            </div>
+
+            <div>
+                <button id="m2" onclick="return suki('Propleh', 'Menu')">Hight Score</button><br>
+            </div>
+
+            <div>
+                <button id="m3" onclick="return suki('Made', 'Menu')">Credit</button><br>
+            </div>
+
+        </div>
+
+    <div id='Game' style="display: none;">
+        <audio controls autoplay loop muted src="Tri poloski.mp3"></audio>
+        <h1>Game Dino</h1>
         <canvas id="board"></canvas>
+        <h2>Reset Web Untuk Kembali ke Menu</h2>
+    </div>
+
+    <div id='Propleh' style="display: none;">
+        <h1>TOP Score</h1>
+        <ul id="highScoresList"></ul>
+        <button id="m2" onclick="return suki('Menu', 'Propleh')">Back</button><br>
+    </div>
+
+    <div id='Made' style="display: none;">
+        <h1>Made By</h1>
+        <h2>Hanif Khalilurrahim</h2>
+        <h2>Cinta Desvina</h2>
+        <h2>Sahara Nur Majid</h2>
+        <button id="m3" onclick="return suki('Menu', 'Made')">Back</button><br>
+    </div>
+
+    <script>
+        function suki(show, hidden ) {
+            document.getElementById(show).style.display='block';
+            document.getElementById(hidden).style.display='none';
+        }
+    </script>
     </body>
 </html>
